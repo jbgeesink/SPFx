@@ -1,22 +1,16 @@
 import { Version } from '@microsoft/sp-core-library';
-import {
-  BaseClientSideWebPart,
-  IPropertyPaneConfiguration,
-  PropertyPaneTextField
-} from '@microsoft/sp-webpart-base';
-import { escape } from '@microsoft/sp-lodash-subset';
-
+import { BaseClientSideWebPart, IPropertyPaneConfiguration } from '@microsoft/sp-webpart-base';
 import { SPComponentLoader } from "@microsoft/sp-loader";
-
-import styles from './ExternalWebpart.module.scss';
-import * as strings from 'externalWebpartStrings';
-import { IExternalWebpartWebPartProps } from './IExternalWebpartWebPartProps';
 
 import "jquery";
 import * as angular from "angular";
 import "kendo";
 
-import "./app/app.module";
+angular.module("ExternalWebpart", []);
+// angular.module("ExternalWebpart", ["kendo.directives"]);
+
+export interface IExternalWebpartWebPartProps {
+}
 
 export default class ExternalWebpartWebPart extends BaseClientSideWebPart<IExternalWebpartWebPartProps> {
 
@@ -34,32 +28,20 @@ export default class ExternalWebpartWebPart extends BaseClientSideWebPart<IExter
     return promise;
   }
 
-
   public render(): void {
     if (this.renderedOnce === false) {
       this.domElement.innerHTML = `
-        <div class="${styles.externalWebpart}" ng-controller="HomeController as vm">
-          <div class="${styles.container}">
-            <div class="ms-Grid-row ms-bgColor-themeDark ms-fontColor-white ${styles.row}">
-              <div class="ms-Grid-col ms-u-lg10 ms-u-xl8 ms-u-xlPush2 ms-u-lgPush1">
-                <span class="ms-font-xl ms-fontColor-white">Welcome to SharePoint!</span>
-                <p class="ms-font-l ms-fontColor-white">Customize SharePoint experiences using Web Parts.</p>
-                <p class="ms-font-l ms-fontColor-white">${escape(this.properties.description)}</p>
-                <a href="https://aka.ms/spfx" class="${styles.button}">
-                  <span class="${styles.label}">Learn more</span>
-                </a>
-                <div>
-                  <button kendo-button="vm.kendoButton" ng-click="vm.testClick()">Kendo Click</button>
-                </div>
-                <div>
-                  Date: <input kendo-date-picker="vm.datePicker" /> 
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>`;
+            <div>
+              <p>
+                Date: <input kendo-date-picker />
+              </p>
+              <p>
+                Test angular: <input type="text" ng-model="name">
+                {{ name }}
+              </p>
+            </div>`;
 
-      this.$injector = angular.bootstrap(this.domElement, ['ExternalWebpart']);
+      this.$injector = angular.bootstrap(this.domElement, ["ExternalWebpart"]);
     }
   }
 
@@ -69,23 +51,7 @@ export default class ExternalWebpartWebPart extends BaseClientSideWebPart<IExter
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
-      pages: [
-        {
-          header: {
-            description: strings.PropertyPaneDescription
-          },
-          groups: [
-            {
-              groupName: strings.BasicGroupName,
-              groupFields: [
-                PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
-                })
-              ]
-            }
-          ]
-        }
-      ]
+      pages: [ ]
     };
   }
 }
