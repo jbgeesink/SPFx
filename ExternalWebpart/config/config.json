@@ -26,8 +26,5 @@
         "angular"
       ]
     }
-  },
-  "localizedResources": {
-    "externalWebpartStrings": "webparts/externalWebpart/loc/{locale}.js"
   }
 }
